@@ -5,7 +5,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import ConfirmationModal from './ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 
-const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, onClose, onConfirm, onListArchive }) => {
+const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, onClose, onConfirm, onListArchive, userRole }) => {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = React.useState(false);
   const [listToDelete, setListToDelete] = React.useState(null);
 
@@ -18,6 +18,11 @@ const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, o
   const handleCardClick = (list) => {
     navigate(`/shopping-list/${list.id}`); // Navigate to specific shoppinglist by ID
   };
+
+    // Only show the lists of which the user is member or owner of
+    const filteredLists = lists.filter(
+      (list) => userRole === 'Owner' || userRole === 'Member'
+    );
 
   // Sort the lists and put archived lists last
   const sortedLists = [...lists].sort((a, b) => {
@@ -42,12 +47,16 @@ const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, o
               <Typography variant="h6" component="div">
                 {list.name}
               </Typography>
-              <IconButton edge="end" onClick={(e) => { e.stopPropagation(); handleArchiveClick(list); }}>
-                <ArchiveIcon />
-              </IconButton>
-              <IconButton edge="end" onClick={(e) => { e.stopPropagation(); onListDelete(list); }}>
-                <DeleteIcon />
-              </IconButton>
+              {userRole === 'Owner' && (
+                <IconButton edge="end" onClick={(e) => { e.stopPropagation(); handleArchiveClick(list); }}>
+                  <ArchiveIcon />
+                </IconButton>
+              )}
+              {userRole === 'Owner' && ( 
+                <IconButton edge="end" onClick={(e) => { e.stopPropagation(); onListDelete(list); }}>
+                  <DeleteIcon />
+                </IconButton>
+               )}
             </CardContent>
           </Card>
         ))}

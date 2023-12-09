@@ -10,7 +10,7 @@ import {
 import AddMemberModal from './AddMemberModal';
 import ConfirmationModal from './ConfirmationModal';
 
-const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
+const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) => {
   const [shoppingListName, setShoppingListName] = useState(currentName);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
@@ -26,14 +26,17 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
   };
 
   const handleAddMember = (newMember) => {
-    setMembers([...members, newMember]);
+    const memberObject = { name: newMember, role: 'Member' };
+    setMembers([...members, memberObject]);
   };
 
 
   const handleRemoveMember = (index) => {
-    const updatedMembers = [...members];
-    updatedMembers.splice(index, 1);
-    setMembers(updatedMembers);
+    if (userRole === 'Owner') {
+      const updatedMembers = [...members];
+      updatedMembers.splice(index, 1);
+      setMembers(updatedMembers);
+    }
   };
 
   const handleSaveChanges = () => {
@@ -41,7 +44,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
     onClose(); // Close the modal after saving
   };
 
-  const handleLeaveConfirmation = () => { //FIX: Leaving the list needs to be implemented after User roles in the next version
+  const handleLeaveConfirmation = () => { 
     setShowConfirmationModal(false); // This will trigger the leaving of the list and return to the list of lists
   };
 
@@ -69,12 +72,14 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
         <Typography variant="subtitle1" component="div" sx={{ marginTop: 2 }}>
           Members:
         </Typography>
-    
-        {/* Add Member Button */}
-        <Button variant="outlined" onClick={handleAddMemberClick}>
-            + Add Member
-        </Button>
+
+        {userRole === 'Owner' && (
+          <Button variant="outlined" onClick={handleAddMemberClick}>
+              + Add Member
+          </Button>
+        )}
 ¨
+        
         {/* Add Member Modal */}
         <AddMemberModal
             open={isAddMemberModalOpen}
@@ -88,8 +93,8 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
               {members.map((member, index) => (
                 <Chip
                     key={index}
-                    label={member}
-                    onDelete={() => handleRemoveMember(index)}
+                    label={member.name}
+                    onDelete={userRole === 'Owner' ? () => handleRemoveMember(index) : undefined}
                     color="primary"
                     sx={{ backgroundColor: '#2196F3', color: 'white' }}
                 />
@@ -99,10 +104,11 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
 
     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
 
-        {/* Leave shared list button */}
-        <Button variant="contained" color="error" onClick={handleLeaveSharedList}>
-            Leave Shared List
-        </Button>
+        {userRole === 'Member' && (
+          <Button variant="contained" color="error" onClick={handleLeaveSharedList}>
+              Leave Shared List
+          </Button>
+        )}
 
 
         <Box sx={{ display: 'flex', gap: 2 }}>

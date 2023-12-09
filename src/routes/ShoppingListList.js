@@ -5,16 +5,16 @@ import FloatingButton from '../components/FloatingButton';
 import AddListModal from '../components/AddListModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 
-const ShoppingListList = () => {
+const ShoppingListList = ({ userRole, setUserRole }) => {
   const [isAddListModalOpen, setIsAddListModalOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = React.useState(false);
   const [listToDelete, setListToDelete] = React.useState(null);
   const [showArchivedLists, setShowArchivedLists] = useState(false);
   const [shoppingLists, setShoppingLists] = useState([
-    { id: 1, name: 'Groceries', archived: false },
-    { id: 2, name: 'Electronics', archived: false },
-    { id: 3, name: 'Clothing', archived: true },
-    { id: 4, name: 'Books', archived: false },
+    { id: 1, name: 'Groceries', archived: false, owner: 1, members: [1, 2] },
+    { id: 2, name: 'Electronics', archived: false, owner: 2, members: [1] },
+    { id: 3, name: 'Clothing', archived: true, owner: 1, members: [2, 3] },
+    { id: 4, name: 'Books', archived: false, owner: 3, members: [] },
   ]);
 
   const openAddListModal = () => { // Open the Add List Modal
@@ -78,6 +78,8 @@ const ShoppingListList = () => {
       toggleLabel="Show Archived Lists"
       onFilterToggle={onFilterToggle}
       showSolvedItems={showArchivedLists}
+      userRole={userRole}
+      setUserRole={setUserRole} 
       />
 
       <div style={{ width: '80%', margin: '20px auto' }}>
@@ -85,6 +87,7 @@ const ShoppingListList = () => {
           lists={shoppingLists.filter((list) => showArchivedLists || !list.archived)}
           onListDelete={openDeleteConfirmation}
           onListArchive={onListArchive}
+          userRole={userRole}
         />
       </div>
 

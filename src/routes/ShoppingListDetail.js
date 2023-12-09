@@ -7,7 +7,7 @@ import FloatingButton from '../components/FloatingButton';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function ShoppingListDetail() {
+function ShoppingListDetail({ userRole, setUserRole }) {
   // Default states START
   const [showSolvedItems, setShowSolvedItems] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -89,6 +89,8 @@ function ShoppingListDetail() {
         showSolvedItems={showSolvedItems}
         navigate={navigate}
         showBackButton={true}
+        userRole={userRole}
+        setUserRole={setUserRole} 
       />
       <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
         <ShoppingList
@@ -107,6 +109,7 @@ function ShoppingListDetail() {
           onClose={handleSettingsClose}
           currentName={shoppingListName}
           onNameChange={handleShoppingListNameChange}
+          userRole={userRole}
         />
     </>
   );
