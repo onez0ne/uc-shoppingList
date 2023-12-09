@@ -1,4 +1,3 @@
-// Import START
 import React, { useState } from 'react';
 import {
   Modal,
@@ -10,7 +9,6 @@ import {
 } from '@mui/material';
 import AddMemberModal from './AddMemberModal';
 import ConfirmationModal from './ConfirmationModal';
-// Import END
 
 const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
   const [shoppingListName, setShoppingListName] = useState(currentName);
@@ -39,13 +37,11 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
   };
 
   const handleSaveChanges = () => {
-    // Logic to save the changes (update shopping list name, etc.)
     onNameChange(shoppingListName); // Update the name in the parent component
     onClose(); // Close the modal after saving
   };
 
-  const handleLeaveConfirmation = () => {
-    console.log("You have left the list.");
+  const handleLeaveConfirmation = () => { //FIX: Leaving the list needs to be implemented after User roles in the next version
     setShowConfirmationModal(false); // This will trigger the leaving of the list and return to the list of lists
   };
 
@@ -66,7 +62,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange }) => {
 
         {/* Owner of the List */}
         <Typography variant="subtitle1" component="div" sx={{ marginTop: 2 }}>
-          Owner: John Doe {/* You can replace it with dynamic data */}
+          Owner: John Doe
         </Typography>
 
         {/* Members of the List */}
