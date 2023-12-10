@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import ShoppingTiles from '../components/ShoppingTiles';
 import FloatingButton from '../components/FloatingButton';
 import AddListModal from '../components/AddListModal';
 import ConfirmationModal from '../components/ConfirmationModal';
+import {
+  fetchShoppingLists,
+  createShoppingList,
+  updateShoppingList,
+  deleteShoppingList,
+} from '../calls';
 
 const ShoppingListList = ({ userRole, setUserRole }) => {
   const [isAddListModalOpen, setIsAddListModalOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = React.useState(false);
   const [listToDelete, setListToDelete] = React.useState(null);
   const [showArchivedLists, setShowArchivedLists] = useState(false);
-  const [shoppingLists, setShoppingLists] = useState([
-    { id: 1, name: 'Groceries', archived: false, owner: 1, members: [1, 2] },
-    { id: 2, name: 'Electronics', archived: false, owner: 2, members: [1] },
-    { id: 3, name: 'Clothing', archived: true, owner: 1, members: [2, 3] },
-    { id: 4, name: 'Books', archived: false, owner: 3, members: [] },
-  ]);
+  const [shoppingLists, setShoppingLists] = useState([]); // Fetch shopping lists from mock data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const lists = await fetchShoppingLists();
+      setShoppingLists(lists);
+    };
+  
+    fetchData();
+  }, []);
 
   const openAddListModal = () => { // Open the Add List Modal
     setIsAddListModalOpen(true);
@@ -25,10 +35,9 @@ const ShoppingListList = ({ userRole, setUserRole }) => {
     setIsAddListModalOpen(false);
   };
 
-  const handleAddList = (newListName) => { // Add a List
-    const newListWithId = { id: Date.now(), name: newListName, archived: false };
-    const updatedLists = [...shoppingLists, newListWithId];
-    setShoppingLists(updatedLists);
+  const handleAddList = async (newListName) => { // Adds the list via a CALL
+    const newList = await createShoppingList(newListName);
+    setShoppingLists((prevLists) => [...prevLists, newList]);
     closeAddListModal();
   };
 
@@ -42,12 +51,9 @@ const ShoppingListList = ({ userRole, setUserRole }) => {
     setIsDeleteConfirmationOpen(false);
   };
 
-  const onListDelete = (listId) => {
-    const listIndex = shoppingLists.findIndex((list) => list.id === listId);
-    if (listIndex !== -1) {
-      const updatedLists = [...shoppingLists.slice(0, listIndex), ...shoppingLists.slice(listIndex + 1)];
-      setShoppingLists(updatedLists);
-    }
+  const onListDelete = async (listId) => { // Deletes the list via a CALL
+    await deleteShoppingList(listId);
+    setShoppingLists((prevLists) => prevLists.filter((list) => list.id !== listId));
   };
 
   const confirmDelete = () => {
@@ -57,12 +63,17 @@ const ShoppingListList = ({ userRole, setUserRole }) => {
     }
   };
 
-  const onListArchive = (listId) => {
-    const listIndex = shoppingLists.findIndex((list) => list.id === listId);
-    if (listIndex !== -1) {
-      const updatedLists = [...shoppingLists];
-      updatedLists[listIndex] = { ...updatedLists[listIndex], archived: !updatedLists[listIndex].archived };
-      setShoppingLists(updatedLists);
+  const onListArchive = async (listId) => {
+    const listToUpdate = shoppingLists.find((list) => list.id === listId);
+  
+    if (listToUpdate) {
+      // Check the current archived status and toggle it
+      const updatedList = await updateShoppingList(listId, { archived: !listToUpdate.archived });
+      
+      // Update the state with the modified list
+      setShoppingLists((prevLists) =>
+        prevLists.map((list) => (list.id === listId ? updatedList : list))
+      );
     }
   };
 

@@ -28,11 +28,13 @@ const Header = ({ title, showSettingsButton = true, onSettingsClick, onFilterTog
               {title}
             </Typography>
           </Grid>
+          {showSettingsButton && (
             <Grid item>
               <IconButton color="inherit" onClick={onSettingsClick}>
                 <SettingsIcon />
               </IconButton>
             </Grid>
+          )}
           {/* Dropdown for switching user role for development purposes */}
           <Grid item>
             <Select

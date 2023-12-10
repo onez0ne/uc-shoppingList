@@ -45,7 +45,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
   };
 
   const handleLeaveConfirmation = () => { 
-    setShowConfirmationModal(false); // This will trigger the leaving of the list and return to the list of lists
+    setShowConfirmationModal(false);
   };
 
   return (
@@ -56,13 +56,14 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
         </Typography>
 
         {/* Name of the Shopping List */}
-        <TextField
-          label="Shopping List Name"
-          fullWidth
-          value={shoppingListName}
-          onChange={(e) => setShoppingListName(e.target.value)}
-        />
-
+        {userRole === 'Owner' && (
+          <TextField
+            label="Shopping List Name"
+            fullWidth
+            value={shoppingListName}
+            onChange={(e) => setShoppingListName(e.target.value)}
+          />
+        )}
         {/* Owner of the List */}
         <Typography variant="subtitle1" component="div" sx={{ marginTop: 2 }}>
           Owner: John Doe
