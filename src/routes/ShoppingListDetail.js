@@ -8,72 +8,71 @@ import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function ShoppingListDetail({ userRole, setUserRole }) {
-  // Default states START
   const [showSolvedItems, setShowSolvedItems] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [shoppingListName, setShoppingListName] = useState("My Shopping List");
-  // Default states END
-
-  const [items, setItems] = useState([ // Items are held here
-    { id: 1, name: 'Potatoes', solved: false },
-    { id: 2, name: 'Fish', solved: false },
-    { id: 3, name: 'Bread', solved: false },
-    { id: 4, name: 'Carrots', solved: false },
-  ]);
+  const [shoppingList, setShoppingList] = useState({
+    id: 1,
+    name: 'My Shopping List',
+    owner: 1, // User ID of the owner
+    members: [1, 2], // Array of user IDs of the members
+    items: [
+      { id: 1, name: 'Potatoes', solved: false },
+      { id: 2, name: 'Fish', solved: false },
+      { id: 3, name: 'Bread', solved: false },
+      { id: 4, name: 'Carrots', solved: false },
+    ],
+  });
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
-  const handleSettingsClick = () => { // Open the settings modal
+  const handleSettingsClick = () => {
     setIsSettingsOpen(true);
   };
 
-  const handleSettingsClose = () => { // Close the settings modal
+  const handleSettingsClose = () => {
     setIsSettingsOpen(false);
   };
 
-  const handleShoppingListNameChange = (newName) => { // Update the shopping list name
-    setShoppingListName(newName);
+  const handleShoppingListNameChange = (newName) => {
+    setShoppingList((prevList) => ({ ...prevList, name: newName }));
   };
 
   const handleFilterToggle = () => {
-    setShowSolvedItems(!showSolvedItems); // Toggle the state
+    setShowSolvedItems(!showSolvedItems);
   };
 
-  const handleItemToggle = (clickedItem) => { // Toggle the solved/unsolved state of item
-    const updatedItems = items.map((item) =>
-      item.id === clickedItem.id ? { ...item, solved: !item.solved } : item
-    );
-  
-    // Move unsolved items to the beginning, and solved items to the end
-    const sortedItems = updatedItems.sort((a, b) => {
-      if (a.solved && !b.solved) {
-        return 1;
-      } else if (!a.solved && b.solved) {
-        return -1;
-      }
-      return 0;
-    });
-  
-    setItems(sortedItems);
+  const handleItemToggle = (clickedItem) => {
+    setShoppingList((prevList) => ({
+      ...prevList,
+      items: prevList.items.map((item) =>
+        item.id === clickedItem.id ? { ...item, solved: !item.solved } : item
+      ),
+    }));
   };
 
-  const handleItemDelete = (itemId) => { // Delete a specific item
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
+  const handleItemDelete = (itemId) => {
+    setShoppingList((prevList) => ({
+      ...prevList,
+      items: prevList.items.filter((item) => item.id !== itemId),
+    }));
   };
 
-  const openAddItemModal = () => { // Open the modal to add item
+  const openAddItemModal = () => {
     setIsAddItemModalOpen(true);
   };
 
-  const closeAddItemModal = () => { // Close the modal to add item
+  const closeAddItemModal = () => {
     setIsAddItemModalOpen(false);
   };
 
-  const handleAddItem = (newItem) => { // Add a new item to the list
-    const newItemWithId = { id: Date.now(), name: newItem, solved: false }; // Date.now Gives unique ID to the item added
-    const updatedItems = [...items, newItemWithId];
-    setItems(updatedItems);
+  const handleAddItem = (newItem) => {
+    setShoppingList((prevList) => ({
+      ...prevList,
+      items: [
+        ...prevList.items,
+        { id: Date.now(), name: newItem, solved: false },
+      ],
+    }));
     setIsAddItemModalOpen(false);
   };
 
@@ -82,7 +81,7 @@ function ShoppingListDetail({ userRole, setUserRole }) {
   return (
     <>
       <Header
-        title={shoppingListName}
+        title={shoppingList.name}
         showSettingsButton={true}
         onSettingsClick={handleSettingsClick}
         onFilterToggle={handleFilterToggle}
@@ -90,11 +89,11 @@ function ShoppingListDetail({ userRole, setUserRole }) {
         navigate={navigate}
         showBackButton={true}
         userRole={userRole}
-        setUserRole={setUserRole} 
+        setUserRole={setUserRole}
       />
       <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
         <ShoppingList
-          items={items}
+          items={shoppingList.items}
           onItemToggle={handleItemToggle}
           onItemDelete={handleItemDelete}
           showSolvedItems={showSolvedItems}
@@ -102,15 +101,19 @@ function ShoppingListDetail({ userRole, setUserRole }) {
       </Container>
       <FloatingButton onClick={openAddItemModal} />
 
-      <AddItemModal open={isAddItemModalOpen} onClose={closeAddItemModal} onAddItem={handleAddItem} />
+      <AddItemModal
+        open={isAddItemModalOpen}
+        onClose={closeAddItemModal}
+        onAddItem={handleAddItem}
+      />
       
       <SettingsModal
-          open={isSettingsOpen}
-          onClose={handleSettingsClose}
-          currentName={shoppingListName}
-          onNameChange={handleShoppingListNameChange}
-          userRole={userRole}
-        />
+        open={isSettingsOpen}
+        onClose={handleSettingsClose}
+        currentName={shoppingList.name}
+        onNameChange={handleShoppingListNameChange}
+        userRole={userRole}
+      />
     </>
   );
 }
