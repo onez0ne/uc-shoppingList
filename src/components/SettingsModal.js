@@ -50,7 +50,20 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '70%', bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: { xs: '90%', sm: '80%', md: '70%' },
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Shopping List Settings
         </Typography>
@@ -75,11 +88,18 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
         </Typography>
 
         {userRole === 'Owner' && (
-          <Button variant="outlined" onClick={handleAddMemberClick}>
-              + Add Member
+          <Button
+            variant="outlined"
+            onClick={handleAddMemberClick}
+            sx={{
+              mt: 2,
+              width: { sm: 'auto', md: 'fit-content' },
+            }}
+          >
+            + Add Member
           </Button>
         )}
-¨
+
         
         {/* Add Member Modal */}
         <AddMemberModal
@@ -103,23 +123,39 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
             </Box>
         </Box>
 
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'flex-end', // Align buttons to the right
+            gap: 2,
+            mt: 2,
+          }}
+        >
         {userRole === 'Member' && (
-          <Button variant="contained" color="error" onClick={handleLeaveSharedList}>
-              Leave Shared List
-          </Button>
-        )}
-
-
-        <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button variant="outlined" onClick={onClose} sx={{ marginRight: 2 }}>
-                Cancel
-            </Button>
-            <Button variant="contained" onClick={handleSaveChanges} color="primary">
-                Save
-            </Button>
-        </Box>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleLeaveSharedList}
+          sx={{ mt: 2 }} 
+        >
+          Leave Shared List
+        </Button>
+      )}
+      <Button
+        variant="outlined"
+        onClick={onClose}
+        sx={{ mt: 2 }}
+      >
+        Cancel
+      </Button>
+      <Button
+        variant="contained"
+        onClick={handleSaveChanges}
+        sx={{ mt: 2 }}
+      >
+        Save
+      </Button>
 
       {/* Leave confirmation modal */}
       <ConfirmationModal

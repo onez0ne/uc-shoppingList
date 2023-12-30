@@ -14,8 +14,21 @@ const AddMemberModal = ({ open, onClose, onAddMember }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Box sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: { xs: '90%', sm: '400px' },
+        bgcolor: 'background.paper',
+        p: 4,
+        pt: 2,
+        pb: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        outline: 'none',
+      }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, mb: 2 }}>
           Add Member
         </Typography>
         <TextField
@@ -26,13 +39,26 @@ const AddMemberModal = ({ open, onClose, onAddMember }) => {
           onChange={(e) => setMemberName(e.target.value)}
           sx={{ mb: 2 }}
         />
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-        <Button variant="outlined" onClick={onClose} sx={{ marginRight: 2 }}>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: 2,
+          mt: 2,
+        }}>
+          <Button 
+            variant="outlined" 
+            onClick={onClose} 
+            sx={{ width: '100%' }}
+          >
             Cancel
-        </Button>
-        <Button variant="contained" onClick={handleAddMember}>
+          </Button>
+          <Button 
+            variant="contained" 
+            onClick={handleAddMember}
+            sx={{ width: '100%' }}
+          >
             Add Member
-        </Button>
+          </Button>
         </Box>
       </Box>
     </Modal>

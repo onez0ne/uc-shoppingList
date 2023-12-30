@@ -110,7 +110,6 @@ function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) 
   
       const newAddedItem = { id: Date.now(), name: newItem, solved: false };
   
-      // Ensure to use the updatedItems array when setting the state
       setShoppingList((prevList) => {
         const newList = {
           ...prevList,
@@ -144,7 +143,7 @@ function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) 
             userRole={userRole}
             setUserRole={setUserRole}
           />
-          <Container component="main" maxWidth="sm" sx={{ mt: 4 }}>
+          <Container component="main" maxWidth={{ xs: '100%', sm: 'sm' }} sx={{ mt: 4 }}>
             <ShoppingList
               items={shoppingList ? shoppingList.items : []}
               onItemToggle={handleItemToggle}

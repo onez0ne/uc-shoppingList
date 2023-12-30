@@ -19,29 +19,18 @@ const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, o
     navigate(`/shopping-list/${list.id}`); // Navigate to specific shoppinglist by ID
   };
 
-    // Only show the lists of which the user is member or owner of
-    const filteredLists = lists.filter(
-      (list) => userRole === 'Owner' || userRole === 'Member'
-    );
-
-  // Sort the lists and put archived lists last
-  const sortedLists = [...lists].sort((a, b) => {
-    if (a.archived && !b.archived) {
-      return 1;
-    } else if (!a.archived && b.archived) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  // Only show the lists of which the user is member or owner of
+  const filteredLists = lists.filter(
+    (list) => userRole === 'Owner' || userRole === 'Member'
+  );
 
   return (
     <>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-        {sortedLists.map((list) => (
+        {lists.map((list) => (
           <Card key={list.id}
-          sx={{ minWidth: 200, flexGrow: 1, backgroundColor: list.archived ? '#d3d3d3' : 'background.paper' }}
-          onClick={() => handleCardClick(list)}
+            sx={{ minWidth: 200, flexGrow: 1, backgroundColor: list.archived ? '#d3d3d3' : 'background.paper' }}
+            onClick={() => handleCardClick(list)}
           >
             <CardContent>
               <Typography variant="h6" component="div">
