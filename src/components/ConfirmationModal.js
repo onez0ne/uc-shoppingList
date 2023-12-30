@@ -1,7 +1,11 @@
 import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const ConfirmationModal = ({ open, onClose, onConfirm, message }) => {
+  
+  const { t } = useTranslation();
+  
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={{
@@ -17,7 +21,7 @@ const ConfirmationModal = ({ open, onClose, onConfirm, message }) => {
         flexDirection: 'column',
       }}>
         <Typography variant="h6" component="div" sx={{ textAlign: 'left', mb: 2 }}>
-          Confirm Action
+          {t('confirmAction')}
         </Typography>
         <Typography variant="body1" sx={{ mt: 2, mb: 4 }}>
           {message}
@@ -33,10 +37,10 @@ const ConfirmationModal = ({ open, onClose, onConfirm, message }) => {
           },
         }}>
           <Button variant="contained" color="error" onClick={onConfirm}>
-            Confirm
+            {t('confirm')}
           </Button>
           <Button variant="outlined" onClick={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
         </Box>
       </Box>

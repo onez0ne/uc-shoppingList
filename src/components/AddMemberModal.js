@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AddMemberModal = ({ open, onClose, onAddMember }) => {
+
+  const { t } = useTranslation();
+
   const [memberName, setMemberName] = useState('');
 
   const handleAddMember = () => {
@@ -29,10 +33,10 @@ const AddMemberModal = ({ open, onClose, onAddMember }) => {
         outline: 'none',
       }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, mb: 2 }}>
-          Add Member
+          {t('headingAddMember')}
         </Typography>
         <TextField
-          label="Member Name"
+          label={t('labelMemberName')}
           variant="outlined"
           fullWidth
           value={memberName}
@@ -50,14 +54,14 @@ const AddMemberModal = ({ open, onClose, onAddMember }) => {
             onClick={onClose} 
             sx={{ width: '100%' }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button 
             variant="contained" 
             onClick={handleAddMember}
             sx={{ width: '100%' }}
           >
-            Add Member
+            {t('addMember')}
           </Button>
         </Box>
       </Box>

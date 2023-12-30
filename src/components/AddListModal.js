@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Box, TextField, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AddListModal = ({ open, onClose, onAddList }) => {
+
+  const { t } = useTranslation();
+
   const [listName, setListName] = useState('');
 
   const handleAddList = () => {
@@ -29,7 +33,7 @@ const AddListModal = ({ open, onClose, onAddList }) => {
         outline: 'none',
       }}>
         <TextField
-          label="Shopping List Name"
+          label={t('labelShoppingListName')}
           variant="outlined"
           fullWidth
           value={listName}
@@ -47,7 +51,7 @@ const AddListModal = ({ open, onClose, onAddList }) => {
             onClick={onClose} 
             sx={{ width: '100%' }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button 
             variant="contained" 
@@ -55,7 +59,7 @@ const AddListModal = ({ open, onClose, onAddList }) => {
             onClick={handleAddList}
             sx={{ width: '100%' }}
           >
-            Add Shopping List
+            {t('addList')}
           </Button>
         </Box>
       </Box>

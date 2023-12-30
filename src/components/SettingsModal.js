@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   Box,
@@ -7,16 +7,18 @@ import {
   Button,
   Chip,
 } from '@mui/material';
+import { fetchUserById } from '../calls';
 import AddMemberModal from './AddMemberModal';
 import ConfirmationModal from './ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 
-const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) => {
+const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole, ownerName }) => {
+  const { t } = useTranslation();
   const [shoppingListName, setShoppingListName] = useState(currentName);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  
   const handleLeaveSharedList = () => {
     setShowConfirmationModal(true);
   };  
@@ -65,26 +67,26 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
         }}
       >
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Shopping List Settings
+          {t('headingListSettings')}
         </Typography>
 
         {/* Name of the Shopping List */}
         {userRole === 'Owner' && (
           <TextField
-            label="Shopping List Name"
+            label={t('labelShoppingListName')}
             fullWidth
             value={shoppingListName}
             onChange={(e) => setShoppingListName(e.target.value)}
           />
         )}
-        {/* Owner of the List */}
+       
         <Typography variant="subtitle1" component="div" sx={{ marginTop: 2 }}>
-          Owner: John Doe
+        {t('labelOwner')}: {ownerName}
         </Typography>
 
         {/* Members of the List */}
         <Typography variant="subtitle1" component="div" sx={{ marginTop: 2 }}>
-          Members:
+          {t('headingMembers')}
         </Typography>
 
         {userRole === 'Owner' && (
@@ -96,7 +98,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
               width: { sm: 'auto', md: 'fit-content' },
             }}
           >
-            + Add Member
+            {t('buttonAddMember')}
           </Button>
         )}
 
@@ -127,7 +129,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'flex-end', // Align buttons to the right
+            justifyContent: 'flex-end',
             gap: 2,
             mt: 2,
           }}
@@ -139,7 +141,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
           onClick={handleLeaveSharedList}
           sx={{ mt: 2 }} 
         >
-          Leave Shared List
+          {t('buttonLeaveSharedList')}
         </Button>
       )}
       <Button
@@ -147,14 +149,14 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
         onClick={onClose}
         sx={{ mt: 2 }}
       >
-        Cancel
+        {t('cancel')}
       </Button>
       <Button
         variant="contained"
         onClick={handleSaveChanges}
         sx={{ mt: 2 }}
       >
-        Save
+        {t('save')}
       </Button>
 
       {/* Leave confirmation modal */}
@@ -162,7 +164,7 @@ const SettingsModal = ({ open, onClose, currentName, onNameChange, userRole }) =
         open={showConfirmationModal}
         onClose={() => setShowConfirmationModal(false)}
         onConfirm={handleLeaveConfirmation}
-        message="Are you sure you want to leave the shared list?"
+        message={t('messageConfirmLeave')}
         />
     </Box>
       </Box>

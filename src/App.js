@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import ShoppingListList from './routes/ShoppingListList';
 import ShoppingListDetail from './routes/ShoppingListDetail';
+import './i18n';
 
 // Define Themes for Dark/Light Mode
 const lightTheme = createTheme({ // Light Mode
@@ -21,7 +22,6 @@ const darkTheme = createTheme({ // Dark Mode
 function App() {
   const [themeMode, setThemeMode] = useState('light'); // State to manage Dark/Light mode
 
-  // useMemo will recompute the theme object only if themeMode changes
   const theme = useMemo(() => {
     return themeMode === 'light' ? lightTheme : darkTheme;
   }, [themeMode]);

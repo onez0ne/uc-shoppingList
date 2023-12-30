@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Box, TextField, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AddItemModal = ({ open, onClose, onAddItem }) => {
+
+  const { t } = useTranslation();
+
   const [itemName, setItemName] = useState('');
 
   const handleAddItem = () => {
@@ -29,7 +33,7 @@ const AddItemModal = ({ open, onClose, onAddItem }) => {
         outline: 'none',
       }}>
         <TextField
-          label="Item Name"
+          label={t('labelItemName')}
           variant="outlined"
           fullWidth
           value={itemName}
@@ -47,7 +51,7 @@ const AddItemModal = ({ open, onClose, onAddItem }) => {
             onClick={onClose} 
             sx={{ width: '100%' }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button 
             variant="contained" 
@@ -55,7 +59,7 @@ const AddItemModal = ({ open, onClose, onAddItem }) => {
             onClick={handleAddItem}
             sx={{ width: '100%' }}
           >
-            Add Item
+            {t('addItem')}
           </Button>
         </Box>
       </Box>

@@ -6,12 +6,16 @@ import AddItemModal from '../components/AddItemModal';
 import FloatingButton from '../components/FloatingButton';
 import { Container } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchShoppingListById, updateShoppingList, updateItemInShoppingList, deleteItemFromShoppingList } from '../calls';
+import { fetchShoppingListById, updateShoppingList, updateItemInShoppingList, deleteItemFromShoppingList, fetchUserById } from '../calls';
+import { useTranslation } from 'react-i18next';
 
 function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) {
+  const { t } = useTranslation();
+  
   const [showSolvedItems, setShowSolvedItems] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [shoppingList, setShoppingList] = useState(null);
+  const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Use the useParams hook to get the id from the route
@@ -20,14 +24,25 @@ function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) 
   // Fetch shopping list data on component mount
   useEffect(() => {
     const fetchData = async () => {
-      if (listId !== null) { // Check if listId is not null
+      if (listId !== null) {
         try {
           const listData = await fetchShoppingListById(listId);
           setShoppingList(listData);
+  
+          // Ensure ownerId is a number before fetching user details
+          let ownerId = listData?.owner;
+          if (typeof ownerId === 'object' && ownerId !== null) {
+            ownerId = ownerId.id;
+          }
+          if (typeof ownerId === 'number') {
+            const ownerData = await fetchUserById(ownerId);
+            setOwner(ownerData);
+          }
+  
         } catch (error) {
           console.error('Error fetching data:', error);
         } finally {
-          setLoading(false); // Set loading to false whether successful or not
+          setLoading(false);
         }
       }
     };
@@ -127,11 +142,11 @@ function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) 
   return (
     <>
       {loading ? (
-        <p>Loading...</p> //TODO: Make the loading prettier (maybe skeleton?)
+        <p>{t('loading')}</p> //TODO: Make the loading prettier (maybe skeleton?)
       ) : (
         <>
           <Header
-            title={shoppingList ? shoppingList.name : 'Loading...'}
+            title={shoppingList ? shoppingList.name : t('loading')}
             showSettingsButton={true}
             onSettingsClick={handleSettingsClick}
             onFilterToggle={handleFilterToggle}
@@ -162,6 +177,8 @@ function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) 
           <SettingsModal
             open={isSettingsOpen}
             onClose={handleSettingsClose}
+            ownerId={shoppingList ? shoppingList.owner : null}
+            ownerName={owner ? owner.name : 'Loading...'}
             currentName={shoppingList ? shoppingList.name : 'Loading...'}
             onNameChange={(newName) => handleShoppingListUpdate({ name: newName })}
             userRole={userRole}

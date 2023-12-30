@@ -11,13 +11,15 @@ import {
   deleteShoppingList,
 } from '../calls';
 import { Container, Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const ShoppingListList = ({ userRole, setUserRole, themeToggler, themeMode }) => {
+  const { t } = useTranslation();
   const [isAddListModalOpen, setIsAddListModalOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = React.useState(false);
   const [listToDelete, setListToDelete] = React.useState(null);
   const [showArchivedLists, setShowArchivedLists] = useState(false);
-  const [shoppingLists, setShoppingLists] = useState([]); // Fetch shopping lists from mock data
+  const [shoppingLists, setShoppingLists] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,7 +104,7 @@ const ShoppingListList = ({ userRole, setUserRole, themeToggler, themeMode }) =>
 
   return (
     <>
-      <Header title="My Shopping Lists"
+      <Header title={t('myShoppingLists')}
       showSettingsButton={false}
       toggleLabel="Show Archived Lists"
       onFilterToggle={onFilterToggle}
@@ -134,7 +136,7 @@ const ShoppingListList = ({ userRole, setUserRole, themeToggler, themeMode }) =>
         open={isDeleteConfirmationOpen}
         onClose={closeDeleteConfirmation}
         onConfirm={confirmDelete}
-        message={`Are you sure you want to delete the shopping list "${listToDelete?.name}"?`}
+        message={t('confirmDeleteListMessage', { name: listToDelete?.name })}
       />
     </>
   );
