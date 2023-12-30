@@ -8,7 +8,7 @@ import { Container } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchShoppingListById, updateShoppingList, updateItemInShoppingList, deleteItemFromShoppingList } from '../calls';
 
-function ShoppingListDetail({ userRole, setUserRole }) {
+function ShoppingListDetail({ userRole, setUserRole, themeToggler, themeMode }) {
   const [showSolvedItems, setShowSolvedItems] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [shoppingList, setShoppingList] = useState(null);
@@ -139,6 +139,8 @@ function ShoppingListDetail({ userRole, setUserRole }) {
             showSolvedItems={showSolvedItems}
             navigate={navigate}
             showBackButton={true}
+            themeToggler={themeToggler} 
+            themeMode={themeMode}
             userRole={userRole}
             setUserRole={setUserRole}
           />

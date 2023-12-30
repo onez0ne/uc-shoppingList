@@ -40,7 +40,7 @@ const ShoppingTiles = ({ lists, onListToggle, onListDelete, showArchivedLists, o
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
         {sortedLists.map((list) => (
           <Card key={list.id}
-          sx={{ minWidth: 200, flexGrow: 1, backgroundColor: list.archived ? '#d3d3d3' : 'white' }}
+          sx={{ minWidth: 200, flexGrow: 1, backgroundColor: list.archived ? '#d3d3d3' : 'background.paper' }}
           onClick={() => handleCardClick(list)}
           >
             <CardContent>

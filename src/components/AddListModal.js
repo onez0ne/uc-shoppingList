@@ -14,7 +14,7 @@ const AddListModal = ({ open, onClose, onAddList }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', p: 4, outline: 0 }}>
+      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', p: 4, outline: 0 }}>
         <TextField
           label="Shopping List Name"
           variant="outlined"

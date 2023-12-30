@@ -11,7 +11,7 @@ import {
   deleteShoppingList,
 } from '../calls';
 
-const ShoppingListList = ({ userRole, setUserRole }) => {
+const ShoppingListList = ({ userRole, setUserRole, themeToggler, themeMode }) => {
   const [isAddListModalOpen, setIsAddListModalOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = React.useState(false);
   const [listToDelete, setListToDelete] = React.useState(null);
@@ -89,6 +89,8 @@ const ShoppingListList = ({ userRole, setUserRole }) => {
       toggleLabel="Show Archived Lists"
       onFilterToggle={onFilterToggle}
       showSolvedItems={showArchivedLists}
+      themeToggler={themeToggler} 
+      themeMode={themeMode}
       userRole={userRole}
       setUserRole={setUserRole} 
       />
